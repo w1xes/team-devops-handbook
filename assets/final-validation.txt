@@ -1,0 +1,29 @@
+Repeatable setup run after integration of PRs #1-#5.
+$ bash /tmp/lab2-install.sh
+Requirement already satisfied: EditorConfig==0.17.1 in ./.venv/lib/python3.12/site-packages (from -r requirements-dev.txt (line 1)) (0.17.1)
+Installed pre-commit and commit-msg from .githooks.
+WARNING: The directory '/home/agent/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+test_changelog_groups_and_marks_breaking_changes (test_automation.CommitFormatTests.test_changelog_groups_and_marks_breaking_changes) ... ok
+test_invalid_messages (test_automation.CommitFormatTests.test_invalid_messages) ... ok
+test_valid_messages (test_automation.CommitFormatTests.test_valid_messages) ... ok
+test_changelog_reads_real_history_and_since (test_automation.GitHookTests.test_changelog_reads_real_history_and_since) ... ok
+test_editor_respects_custom_comment_character (test_automation.GitHookTests.test_editor_respects_custom_comment_character) ... ok
+test_editor_respects_explicit_default_cleanup (test_automation.GitHookTests.test_editor_respects_explicit_default_cleanup) ... ok
+test_editor_respects_scissors_cleanup (test_automation.GitHookTests.test_editor_respects_scissors_cleanup) ... ok
+test_fixture_is_independent_of_inherited_signing_configuration (test_automation.GitHookTests.test_fixture_is_independent_of_inherited_signing_configuration) ... ok
+test_hooks_reject_whitespace_and_invalid_message_then_allow_valid_commit (test_automation.GitHookTests.test_hooks_reject_whitespace_and_invalid_message_then_allow_valid_commit) ... ok
+test_installer_preserves_global_hook_configuration (test_automation.GitHookTests.test_installer_preserves_global_hook_configuration) ... ok
+test_verbose_editor_commit_removes_comments_and_diff (test_automation.GitHookTests.test_verbose_editor_commit_removes_comments_and_diff) ... ok
+test_missing_resource_fails_with_body (test_handbook.CurlReadmeTests.test_missing_resource_fails_with_body) ... ok
+test_missing_resource_without_fail_flag_returns_zero (test_handbook.CurlReadmeTests.test_missing_resource_without_fail_flag_returns_zero) ... ok
+test_success_returns_documented_json_and_zero (test_handbook.CurlReadmeTests.test_success_returns_documented_json_and_zero) ... ok
+test_effective_settings_for_four_file_types (test_handbook.EditorConfigurationTests.test_effective_settings_for_four_file_types) ... ok
+test_wrong_and_correct_conflict_resolutions_have_different_behavior (test_handbook.EditorConfigurationTests.test_wrong_and_correct_conflict_resolutions_have_different_behavior) ... ok
+test_real_archive_environment_cache_and_compiled_binary_are_ignored (test_handbook.IgnoreConfigurationTests.test_real_archive_environment_cache_and_compiled_binary_are_ignored) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 1.203s
+
+OK
+
+Exit status: 0

@@ -1,0 +1,6 @@
+example.py: indent_size=4, indent_style=space, trim_trailing_whitespace=true
+example.sh: indent_size=4, indent_style=space, trim_trailing_whitespace=true
+example.md: indent_size=2, indent_style=space, trim_trailing_whitespace=false
+Makefile: indent_style=tab
+gitignore: tar.gz, dummy .env, __pycache__, compiled executable all ignored
+Compiled C executable exited 0; git status --porcelain stayed empty

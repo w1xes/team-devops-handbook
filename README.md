@@ -44,7 +44,7 @@ sh scripts/install-hooks.sh
 - [Шаблон README](docs/readme-template.md) і [приклад для curl](docs/examples/curl-readme.md).
 - [Чек-лист рев'ю](docs/code-review.md).
 - [Конфлікт злиття](docs/conflict.md).
-- [Параметри ruleset і необхідна ручна дія](docs/repository-settings.md).
+- [Активний ruleset і докази перевірки](docs/repository-settings.md).
 - [Звіт лабораторної та підготовка до захисту](docs/lab-report.md).
 - `pre-commit` відхиляє кінцеві пробіли в індексі, `commit-msg` перевіряє формат.
 - CI повторює перевірки; локальні хуки не є засобом захисту від обходу.

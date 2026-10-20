@@ -45,6 +45,7 @@ class GitHookTests(unittest.TestCase):
         self.run_git("init", "-b", "main")
         self.run_git("config", "user.name", "Hook test fixture")
         self.run_git("config", "user.email", "fixture@example.invalid")
+        self.run_git("config", "commit.gpgsign", "false")
         shutil.copytree(ROOT / ".githooks", self.path / ".githooks")
         shutil.copytree(ROOT / "scripts", self.path / "scripts", ignore=shutil.ignore_patterns("__pycache__"))
         self.run_git("config", "core.hooksPath", ".githooks")
@@ -95,12 +96,25 @@ class GitHookTests(unittest.TestCase):
         self.assertEqual(local.returncode, 1)
         self.assertIn("/existing/global/hooks", result.stderr)
 
+    def test_fixture_is_independent_of_inherited_signing_configuration(self):
+        global_config = self.path / "signing.gitconfig"
+        global_config.write_text(
+            '[commit]\n\tgpgsign = true\n[gpg]\n\tprogram = /nonexistent-test-signer\n'
+        )
+        self.stage("unsigned test fixture\n")
+        result = subprocess.run(
+            ["git", "commit", "-m", "test: create unsigned fixture"], cwd=self.path,
+            env={**os.environ, "GIT_CONFIG_GLOBAL": str(global_config)},
+            text=True, capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def editor_commit(self, *options):
         editor = self.path / "editor.py"
         editor.write_text(
             "#!/usr/bin/env python3\nimport pathlib,sys\n"
             "p=pathlib.Path(sys.argv[1])\n"
-            "p.write_text('docs: edit message interactively\\n'+p.read_text())\n"
+            "p.write_text('docs: edit message interactively\\n'+p.read_text().lstrip('\\n'))\n"
         )
         editor.chmod(0o755)
         return subprocess.run(
@@ -120,6 +134,13 @@ class GitHookTests(unittest.TestCase):
     def test_editor_respects_custom_comment_character(self):
         self.run_git("config", "core.commentChar", ";")
         self.stage("custom comment\n")
+        self.editor_commit()
+        stored = self.run_git("log", "-1", "--format=%B").stdout
+        self.assertEqual(stored.strip(), "docs: edit message interactively")
+
+    def test_editor_respects_explicit_default_cleanup(self):
+        self.run_git("config", "commit.cleanup", "default")
+        self.stage("default cleanup\n")
         self.editor_commit()
         stored = self.run_git("log", "-1", "--format=%B").stdout
         self.assertEqual(stored.strip(), "docs: edit message interactively")

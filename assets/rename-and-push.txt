@@ -1,0 +1,20 @@
+Original folder: /workspace/team-devops-handbook
+Renamed folder: /workspace/team-devops-handbook-local
+
+$ git remote -v
+origin	https://github.com/w1xes/team-devops-handbook.git (fetch)
+origin	https://github.com/w1xes/team-devops-handbook.git (push)
+
+$ git push -u origin feature/w1xes-review-checklist
+branch 'feature/w1xes-review-checklist' set up to track 'origin/feature/w1xes-review-checklist'.
+remote:
+remote: Create a pull request for 'feature/w1xes-review-checklist' on GitHub by visiting:
+remote:      https://github.com/w1xes/team-devops-handbook/pull/new/feature/w1xes-review-checklist
+remote:
+To https://github.com/w1xes/team-devops-handbook.git
+ * [new branch]      feature/w1xes-review-checklist -> feature/w1xes-review-checklist
+
+Push exit status: 0
+Folder subsequently restored to original path for cloud configuration stability.
+
+Transcript: terminal trailing spaces removed to comply with pre-commit.

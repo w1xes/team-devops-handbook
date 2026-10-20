@@ -40,7 +40,9 @@ def hook_message(path):
             raise subprocess.CalledProcessError(result.returncode, result.args)
         return result.stdout.strip()
     edited = os.environ.get("GIT_EDITOR") != ":"
-    cleanup = setting("commit.cleanup") or ("strip" if edited else "whitespace")
+    cleanup = setting("commit.cleanup") or "default"
+    if cleanup == "default":
+        cleanup = "strip" if edited else "whitespace"
     if cleanup == "verbatim":
         return message
     comment = setting("core.commentString") or setting("core.commentChar") or "#"

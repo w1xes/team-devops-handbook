@@ -100,7 +100,7 @@ class GitHookTests(unittest.TestCase):
         editor.write_text(
             "#!/usr/bin/env python3\nimport pathlib,sys\n"
             "p=pathlib.Path(sys.argv[1])\n"
-            "p.write_text('docs: edit message interactively\\n'+p.read_text())\n"
+            "p.write_text('docs: edit message interactively\\n'+p.read_text().lstrip('\\n'))\n"
         )
         editor.chmod(0o755)
         return subprocess.run(
@@ -120,6 +120,13 @@ class GitHookTests(unittest.TestCase):
     def test_editor_respects_custom_comment_character(self):
         self.run_git("config", "core.commentChar", ";")
         self.stage("custom comment\n")
+        self.editor_commit()
+        stored = self.run_git("log", "-1", "--format=%B").stdout
+        self.assertEqual(stored.strip(), "docs: edit message interactively")
+
+    def test_editor_respects_explicit_default_cleanup(self):
+        self.run_git("config", "commit.cleanup", "default")
+        self.stage("default cleanup\n")
         self.editor_commit()
         stored = self.run_git("log", "-1", "--format=%B").stdout
         self.assertEqual(stored.strip(), "docs: edit message interactively")

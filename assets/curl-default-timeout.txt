@@ -1,0 +1,9 @@
+Official source: https://github.com/curl/curl/blob/curl-8_14_1/docs/libcurl/opts/CURLOPT_CONNECTTIMEOUT.md
+Downloaded over verified HTTPS from raw.githubusercontent.com
+SHA256: d60d16303375b2c7a58bd04d9d91c23b0d71c45b26229b0b4f6067f42a768384
+
+Excerpt:
+Set this option to zero to switch to the default built-in connection timeout -
+300 seconds. See also the CURLOPT_TIMEOUT(3) option.
+
+DEFAULT: 300

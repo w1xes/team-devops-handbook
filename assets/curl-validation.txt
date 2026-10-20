@@ -1,0 +1,5 @@
+curl 8.14.1 (x86_64-pc-linux-gnu) libcurl/8.14.1 OpenSSL/3.5.7 zlib/1.3.1 brotli/1.1.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.2 libssh2/1.11.1 nghttp2/1.64.0 nghttp3/1.8.0 librtmp/2.3 OpenLDAP/2.6.10
+Verified installed curl --manual sections: --fail-with-body, --retry-max-time, EXIT CODES
+/health.json; fail-with-body=True; exit=0; body={"status":"ok"}
+/missing; fail-with-body=True; exit=22; HTML 404 body preserved
+/missing; fail-with-body=False; exit=0; HTML 404 body preserved

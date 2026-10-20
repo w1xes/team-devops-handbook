@@ -3,6 +3,7 @@
 from functools import partial
 import http.server
 from pathlib import Path
+import re
 import subprocess
 import tarfile
 import tempfile
@@ -12,6 +13,20 @@ import unittest
 from editorconfig import get_properties
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class HandbookNavigationTests(unittest.TestCase):
+    def test_local_documentation_and_evidence_links_exist(self):
+        checked = 0
+        for document in [ROOT / "README.md", *(ROOT / "docs").rglob("*.md")]:
+            for link in re.findall(r"\]\(([^)]+)\)", document.read_text(encoding="utf-8")):
+                target = link.split("#", 1)[0]
+                if not target or "://" in target or target.startswith("mailto:"):
+                    continue
+                with self.subTest(document=document.relative_to(ROOT), target=target):
+                    self.assertTrue((document.parent / target).is_file())
+                checked += 1
+        self.assertGreater(checked, 0, "No local links were checked")
 
 
 class EditorConfigurationTests(unittest.TestCase):

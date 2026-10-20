@@ -1,8 +1,7 @@
-Repeatable setup run after integration of PRs #1-#5.
-$ bash /tmp/lab2-install.sh
-Requirement already satisfied: EditorConfig==0.17.1 in ./.venv/lib/python3.12/site-packages (from -r requirements-dev.txt (line 1)) (0.17.1)
-Installed pre-commit and commit-msg from .githooks.
-WARNING: The directory '/home/agent/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Final integrated validation after PRs #1-#5 and navigation regression from Copilot PR #6.
+Environment installation and hook setup were previously run twice successfully.
+
+$ .venv/bin/python -m unittest discover -s tests -v
 test_changelog_groups_and_marks_breaking_changes (test_automation.CommitFormatTests.test_changelog_groups_and_marks_breaking_changes) ... ok
 test_invalid_messages (test_automation.CommitFormatTests.test_invalid_messages) ... ok
 test_valid_messages (test_automation.CommitFormatTests.test_valid_messages) ... ok
@@ -19,10 +18,11 @@ test_missing_resource_without_fail_flag_returns_zero (test_handbook.CurlReadmeTe
 test_success_returns_documented_json_and_zero (test_handbook.CurlReadmeTests.test_success_returns_documented_json_and_zero) ... ok
 test_effective_settings_for_four_file_types (test_handbook.EditorConfigurationTests.test_effective_settings_for_four_file_types) ... ok
 test_wrong_and_correct_conflict_resolutions_have_different_behavior (test_handbook.EditorConfigurationTests.test_wrong_and_correct_conflict_resolutions_have_different_behavior) ... ok
+test_local_documentation_and_evidence_links_exist (test_handbook.HandbookNavigationTests.test_local_documentation_and_evidence_links_exist) ... ok
 test_real_archive_environment_cache_and_compiled_binary_are_ignored (test_handbook.IgnoreConfigurationTests.test_real_archive_environment_cache_and_compiled_binary_are_ignored) ... ok
 
 ----------------------------------------------------------------------
-Ran 17 tests in 1.203s
+Ran 18 tests in 1.261s
 
 OK
 

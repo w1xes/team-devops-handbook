@@ -1,0 +1,11 @@
+$ git merge origin/main
+Auto-merging .editorconfig
+CONFLICT (add/add): Merge conflict in .editorconfig
+Automatic merge failed; fix conflicts and then commit the result.
+Exit status: 1
+
+$ git status --short
+AA .editorconfig
+A  assets/editor-settings-validation.txt
+A  docs/editor-config.md
+?? assets/conflict/

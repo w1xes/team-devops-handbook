@@ -83,3 +83,5 @@ python3 scripts/changelog.py --since <commit-or-tag> --output CHANGELOG.md
 короткі SHA та позначає breaking changes. `--since` виключає вказану ревізію;
 без нього включається вся історія. Для історії `main` спочатку перемкніться
 на `main`. Не підставляйте недовірені shell-вирази замість ревізії.
+Після push у `main` GitHub Actions також генерує цей список і публікує
+його в **Summary** відповідного запуску workflow `Handbook checks`.

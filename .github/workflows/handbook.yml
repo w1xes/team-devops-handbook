@@ -37,3 +37,4 @@ jobs:
         run: |
           python3 scripts/check_commit.py --range HEAD~1..HEAD
           python3 scripts/changelog.py --output CHANGELOG.md
+          cat CHANGELOG.md >> "$GITHUB_STEP_SUMMARY"

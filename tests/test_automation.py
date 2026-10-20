@@ -45,6 +45,7 @@ class GitHookTests(unittest.TestCase):
         self.run_git("init", "-b", "main")
         self.run_git("config", "user.name", "Hook test fixture")
         self.run_git("config", "user.email", "fixture@example.invalid")
+        self.run_git("config", "commit.gpgsign", "false")
         shutil.copytree(ROOT / ".githooks", self.path / ".githooks")
         shutil.copytree(ROOT / "scripts", self.path / "scripts", ignore=shutil.ignore_patterns("__pycache__"))
         self.run_git("config", "core.hooksPath", ".githooks")
@@ -94,6 +95,19 @@ class GitHookTests(unittest.TestCase):
         )
         self.assertEqual(local.returncode, 1)
         self.assertIn("/existing/global/hooks", result.stderr)
+
+    def test_fixture_is_independent_of_inherited_signing_configuration(self):
+        global_config = self.path / "signing.gitconfig"
+        global_config.write_text(
+            '[commit]\n\tgpgsign = true\n[gpg]\n\tprogram = /nonexistent-test-signer\n'
+        )
+        self.stage("unsigned test fixture\n")
+        result = subprocess.run(
+            ["git", "commit", "-m", "test: create unsigned fixture"], cwd=self.path,
+            env={**os.environ, "GIT_CONFIG_GLOBAL": str(global_config)},
+            text=True, capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def editor_commit(self, *options):
         editor = self.path / "editor.py"

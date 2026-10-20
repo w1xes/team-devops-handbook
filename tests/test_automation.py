@@ -1,6 +1,6 @@
 """Behavioral tests for the shared commit convention and actual Git hooks."""
 
-import importlib.util
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -77,6 +77,70 @@ class GitHookTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(self.path / "scripts/changelog.py"), "--since", first], cwd=self.path, text=True, capture_output=True, check=True)
         self.assertIn("second entry", result.stdout)
         self.assertNotIn("first entry", result.stdout)
+
+    def test_installer_preserves_global_hook_configuration(self):
+        self.run_git("config", "--unset", "core.hooksPath")
+        global_config = self.path / "global.gitconfig"
+        global_config.write_text('[core]\n\thooksPath = /existing/global/hooks\n')
+        environment = {**os.environ, "GIT_CONFIG_GLOBAL": str(global_config)}
+        result = subprocess.run(
+            ["sh", "scripts/install-hooks.sh"], cwd=self.path,
+            env=environment, text=True, capture_output=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        local = subprocess.run(
+            ["git", "config", "--local", "--get", "core.hooksPath"],
+            cwd=self.path, text=True, capture_output=True,
+        )
+        self.assertEqual(local.returncode, 1)
+        self.assertIn("/existing/global/hooks", result.stderr)
+
+    def editor_commit(self, *options):
+        editor = self.path / "editor.py"
+        editor.write_text(
+            "#!/usr/bin/env python3\nimport pathlib,sys\n"
+            "p=pathlib.Path(sys.argv[1])\n"
+            "p.write_text('docs: edit message interactively\\n'+p.read_text())\n"
+        )
+        editor.chmod(0o755)
+        return subprocess.run(
+            ["git", *options, "commit", "-v"], cwd=self.path,
+            env={**os.environ, "GIT_EDITOR": str(editor)},
+            capture_output=True, text=True, check=True,
+        )
+
+    def test_verbose_editor_commit_removes_comments_and_diff(self):
+        self.stage("first\n\nthird\n")
+        self.run_git("commit", "-m", "docs: create editor fixture")
+        self.stage("first\n\nupdated\n")
+        self.editor_commit()
+        stored = self.run_git("log", "-1", "--format=%B").stdout
+        self.assertEqual(stored.strip(), "docs: edit message interactively")
+
+    def test_editor_respects_custom_comment_character(self):
+        self.run_git("config", "core.commentChar", ";")
+        self.stage("custom comment\n")
+        self.editor_commit()
+        stored = self.run_git("log", "-1", "--format=%B").stdout
+        self.assertEqual(stored.strip(), "docs: edit message interactively")
+
+    def test_editor_respects_scissors_cleanup(self):
+        self.run_git("config", "commit.cleanup", "scissors")
+        self.stage("scissors\n")
+        # Comments remain under scissors cleanup, so the header needs its blank line.
+        editor = self.path / "scissors-editor.py"
+        editor.write_text(
+            "#!/usr/bin/env python3\nimport pathlib,sys\n"
+            "p=pathlib.Path(sys.argv[1])\n"
+            "p.write_text('docs: scissors cleanup\\n\\n'+p.read_text())\n"
+        )
+        editor.chmod(0o755)
+        subprocess.run(["git", "commit", "-v"], cwd=self.path,
+                       env={**os.environ, "GIT_EDITOR": str(editor)},
+                       capture_output=True, text=True, check=True)
+        stored = self.run_git("log", "-1", "--format=%B").stdout
+        self.assertTrue(stored.startswith("docs: scissors cleanup\n"))
+        self.assertNotIn("diff --git", stored)
 
 
 if __name__ == "__main__":

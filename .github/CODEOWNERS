@@ -1,0 +1,11 @@
+# A single actual participant owns each section. No fictitious reviewers.
+* @w1xes
+/docs/branching.md @w1xes
+/docs/editor-config.md @w1xes
+/docs/readme-template.md @w1xes
+/docs/code-review.md @w1xes
+/docs/conflict.md @w1xes
+/docs/lab-report.md @w1xes
+/.github/ @w1xes
+/.githooks/ @w1xes
+/scripts/ @w1xes

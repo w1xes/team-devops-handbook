@@ -1,0 +1,27 @@
+# Local secrets (keep only a deliberately sanitized example).
+.env
+.env.*
+!.env.example
+
+# Python bytecode and local environments.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Archives, generated binaries and build output.
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.exe
+*.o
+/build/
+/dist/
+
+# Editor/OS files and generated changelog.
+.vscode/
+.idea/
+*.swp
+.DS_Store
+/CHANGELOG.md

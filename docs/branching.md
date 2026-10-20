@@ -45,10 +45,11 @@ git switch -c feature/w1xes-readme-template
 ```sh
 sh scripts/install-hooks.sh
 git config --local --get core.hooksPath
-python3 -m unittest discover -s tests -v
+.venv/bin/python -m unittest discover -s tests -v
 ```
 
 Скрипт виставляє локальний `core.hooksPath=.githooks`; повторний запуск безпечний.
+Перед тестами підготуйте `.venv` за інструкцією головного README.
 Інший уже налаштований шлях, зокрема глобальний, він не перекриває. Тека `.git/hooks` не
 версіонується, тому після клону встановлення треба повторити. Збережені
 `.githooks/pre-commit` і `.githooks/commit-msg` мають виконуваний біт.
@@ -82,3 +83,5 @@ python3 scripts/changelog.py --since <commit-or-tag> --output CHANGELOG.md
 короткі SHA та позначає breaking changes. `--since` виключає вказану ревізію;
 без нього включається вся історія. Для історії `main` спочатку перемкніться
 на `main`. Не підставляйте недовірені shell-вирази замість ревізії.
+Після push у `main` GitHub Actions також генерує цей список і публікує
+його в **Summary** відповідного запуску workflow `Handbook checks`.

@@ -1,0 +1,9 @@
+Main history after five squash merges; recorded before merging reporting PR #6.
+
+$ git log --oneline origin/main
+32fe1a1 docs: add CLI review checklist and governance evidence (#5)
+912fe08 docs: validate a console README template with curl (#4)
+69aa4e6 docs: demonstrate and resolve EditorConfig merge conflict (#3)
+d48a72b docs: configure and validate shared editor settings (#2)
+7e6e3b6 feat: establish handbook workflow and commit automation (#1)
+9871262 chore: initialize handbook repository

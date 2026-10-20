@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 cd "$(git rev-parse --show-toplevel)"
-current=$(git config --local --get core.hooksPath || true)
+current=$(git config --get core.hooksPath || true)
 if [ -n "$current" ] && [ "$current" != .githooks ]; then
     echo "Existing core.hooksPath=$current; preserve or migrate it first." >&2
     exit 1

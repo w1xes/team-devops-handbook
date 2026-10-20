@@ -1,6 +1,6 @@
 """Behavioral tests for the shared commit convention and actual Git hooks."""
 
-import importlib.util
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -77,6 +77,23 @@ class GitHookTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(self.path / "scripts/changelog.py"), "--since", first], cwd=self.path, text=True, capture_output=True, check=True)
         self.assertIn("second entry", result.stdout)
         self.assertNotIn("first entry", result.stdout)
+
+    def test_installer_preserves_global_hook_configuration(self):
+        self.run_git("config", "--unset", "core.hooksPath")
+        global_config = self.path / "global.gitconfig"
+        global_config.write_text('[core]\n\thooksPath = /existing/global/hooks\n')
+        environment = {**os.environ, "GIT_CONFIG_GLOBAL": str(global_config)}
+        result = subprocess.run(
+            ["sh", "scripts/install-hooks.sh"], cwd=self.path,
+            env=environment, text=True, capture_output=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        local = subprocess.run(
+            ["git", "config", "--local", "--get", "core.hooksPath"],
+            cwd=self.path, text=True, capture_output=True,
+        )
+        self.assertEqual(local.returncode, 1)
+        self.assertIn("/existing/global/hooks", result.stderr)
 
 
 if __name__ == "__main__":
